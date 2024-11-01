@@ -1,5 +1,8 @@
 import express from 'express';
 import { AppDataSource } from './config/database';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 const app = express();
 const PORT = parseInt(process.env.PORT!) || 3000;
