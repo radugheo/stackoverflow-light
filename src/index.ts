@@ -1,12 +1,18 @@
 import express from 'express';
+import { AppDataSource } from './config/database';
 
 const app = express();
-const port = 3000;
+const PORT = parseInt(process.env.PORT!) || 3000;
 
 app.get('/health', (_, res) => {
-  res.json({ status: 'ok' });
+    res.json({ status: 'ok' });
 });
 
-app.listen(port, () => {
-  console.log(`App listening on port ${port}`);
-});
+AppDataSource.initialize()
+    .then(() => {
+        console.log("Data Source has been initialized!");
+        app.listen(PORT, '0.0.0.0', () => {
+            console.info(`Server is running on port ${PORT}`);
+        });
+    })
+    .catch((error) => console.log("Error during Data Source initialization:", error));
