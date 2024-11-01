@@ -5,7 +5,7 @@ import { AppDataSource } from '../../src/config/database';
 import { mockQuestion } from '../mocks/questions';
 import { mockUser } from '../mocks/users';
 import { mockQuestionRepository, mockUserRepository } from '../mocks/repositories';
-import { Repository } from 'typeorm';
+import { ObjectLiteral, Repository } from 'typeorm';
 
 describe('QuestionService', () => {
   let questionService: QuestionService = new QuestionService();
@@ -14,9 +14,9 @@ describe('QuestionService', () => {
     expect.hasAssertions();
 
     jest.spyOn(AppDataSource, 'getRepository').mockImplementation((entity) => {
-      if (entity === Question) return mockQuestionRepository;
-      if (entity === User) return mockUserRepository;
-      return {} as Repository<any>;
+      if (entity === Question) return mockQuestionRepository as Repository<Question>;
+      if (entity === User) return mockUserRepository as Repository<User>;
+      return {} as Repository<ObjectLiteral>;
     });
 
     questionService = new QuestionService();
