@@ -1,10 +1,6 @@
 import { Response, NextFunction } from 'express';
-import { auth } from 'express-openid-connect';
-import { authConfig } from '../config/auth-config';
 import { UserService } from '../services/user-service';
 import { Auth0UserProfile, AuthRequest } from '../types/request-types';
-
-export const configureAuth = auth(authConfig);
 
 export const handleAuth = (userService: UserService) => {
   return async (req: AuthRequest, res: Response, next: NextFunction) => {

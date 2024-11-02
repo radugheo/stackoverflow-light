@@ -1,4 +1,5 @@
 import * as dotenv from 'dotenv';
+import { auth } from 'express-openid-connect';
 
 dotenv.config();
 
@@ -10,3 +11,5 @@ export const authConfig = {
   issuerBaseURL: process.env.AUTH0_DOMAIN,
   secret: process.env.AUTH0_SECRET,
 };
+
+export const configureAuth = auth(authConfig);
