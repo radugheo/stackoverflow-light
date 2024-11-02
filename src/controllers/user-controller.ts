@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { UserService } from '../services/user-service';
 import { AuthRequest } from '../types/request-types';
 

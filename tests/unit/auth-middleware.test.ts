@@ -7,7 +7,7 @@ import { mockUser } from '../mocks/users';
 describe('Auth Middleware', () => {
   let mockAuthRequest: Partial<AuthRequest>;
   let mockAuthResponse: Partial<Response>;
-  let nextFunction: NextFunction = jest.fn();
+  const nextFunction: NextFunction = jest.fn();
 
   beforeEach(() => {
     expect.hasAssertions();
