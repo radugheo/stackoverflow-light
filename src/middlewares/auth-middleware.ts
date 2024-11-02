@@ -1,6 +1,6 @@
 import { Response, NextFunction } from 'express';
 import { UserService } from '../services/user-service';
-import { Auth0UserProfile, AuthRequest } from '../types/request-types';
+import { AuthRequest } from '../types/request-types';
 
 export const requireAuth = (req: AuthRequest, res: Response, next: NextFunction) => {
   if (!req.oidc.isAuthenticated()) {
@@ -12,12 +12,12 @@ export const requireAuth = (req: AuthRequest, res: Response, next: NextFunction)
 export const handleAuth = (userService: UserService) => {
   return async (req: AuthRequest, res: Response, next: NextFunction) => {
     if (req.oidc.isAuthenticated()) {
-      const auth0User = req.oidc.user as Auth0UserProfile;
+      const auth0User = req.oidc.user!;
       try {
         const user = await userService.findOrCreateUser({
           auth0Id: auth0User.sub,
           email: auth0User.email,
-          displayName: auth0User.name || auth0User.nickname || auth0User.email,
+          displayName: auth0User.name || auth0User.email,
         });
         req.user = user;
       } catch (error) {

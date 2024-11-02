@@ -5,6 +5,7 @@ import { configureAuth } from './config/auth-config';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerOptions from './config/swagger-config';
+import { questionRouter } from './routes/question-routes';
 
 dotenv.config();
 
@@ -22,6 +23,6 @@ export const createApp = () => {
   });
 
   app.use('/api/users', userRouter);
-
+  app.use('/api/questions', questionRouter);
   return app;
 };

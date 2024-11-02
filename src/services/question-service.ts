@@ -2,7 +2,11 @@ import { Repository } from 'typeorm';
 import { Question } from '../models/question-entity';
 import { User } from '../models/user-entity';
 import { AppDataSource } from '../config/database-config';
-import { CreateQuestionDto, UpdateQuestionDto } from '../types/question-types';
+import {
+  CreateQuestionDto,
+  FindQuestionsOptions,
+  UpdateQuestionDto,
+} from '../types/question-types';
 
 export class QuestionService {
   private questionRepository: Repository<Question>;
@@ -13,18 +17,25 @@ export class QuestionService {
     this.userRepository = AppDataSource.getRepository(User);
   }
 
-  create = async (createQuestionDto: CreateQuestionDto): Promise<Question> => {
-    const author = await this.userRepository.findOneBy({ id: createQuestionDto.authorId });
-    if (!author) {
-      throw new Error('Author not found');
-    }
+  findAll = async (options: FindQuestionsOptions = {}) => {
+    const { page = 1, limit = 10, sortBy = 'newest' } = options;
 
-    const question = this.questionRepository.create({
-      ...createQuestionDto,
-      author,
+    const [questions, total] = await this.questionRepository.findAndCount({
+      relations: ['author'],
+      skip: (page - 1) * limit,
+      take: limit,
+      order: sortBy === 'newest' ? { created: 'DESC' } : { voteCount: 'DESC' },
     });
 
-    return this.questionRepository.save(question);
+    return {
+      questions,
+      pagination: {
+        page,
+        limit,
+        total,
+        pages: Math.ceil(total / limit),
+      },
+    };
   };
 
   findOne = async (id: string): Promise<Question> => {
@@ -45,6 +56,20 @@ export class QuestionService {
     }
 
     return question;
+  };
+
+  create = async (createQuestionDto: CreateQuestionDto): Promise<Question> => {
+    const author = await this.userRepository.findOneBy({ id: createQuestionDto.authorId });
+    if (!author) {
+      throw new Error('Author not found');
+    }
+
+    const question = this.questionRepository.create({
+      ...createQuestionDto,
+      author,
+    });
+
+    return this.questionRepository.save(question);
   };
 
   update = async (
@@ -73,24 +98,10 @@ export class QuestionService {
   };
 
   updateVoteCount = async (id: string, value: number): Promise<void> => {
-    await this.questionRepository
-      .createQueryBuilder()
-      .update(Question)
-      .set({
-        voteCount: () => `"voteCount" + ${value}`,
-      })
-      .where('id = :id', { id })
-      .execute();
+    await this.questionRepository.increment({ id }, 'voteCount', value);
   };
 
   updateAnswerCount = async (id: string, value: number): Promise<void> => {
-    await this.questionRepository
-      .createQueryBuilder()
-      .update(Question)
-      .set({
-        answerCount: () => `"answerCount" + ${value}`,
-      })
-      .where('id = :id', { id })
-      .execute();
+    await this.questionRepository.increment({ id }, 'answerCount', value);
   };
 }
