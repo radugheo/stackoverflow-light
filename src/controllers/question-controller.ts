@@ -40,7 +40,7 @@ export class QuestionController {
       };
 
       const question = await this.questionService.create(createQuestionDto);
-      res.status(201).json(question);
+      res.status(200).json(question);
     } catch (error) {
       res.status(500).json({ error: (error as Error).message });
     }
@@ -63,7 +63,7 @@ export class QuestionController {
   delete = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
       await this.questionService.delete(req.params.id, req.user!.id);
-      res.status(204).json({ message: 'Delete was successful' });
+      res.status(200).json({ message: 'Delete was successful' });
     } catch (error) {
       res.status(403).json({ error: (error as Error).message });
     }

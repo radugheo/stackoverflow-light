@@ -86,10 +86,12 @@ questionRouter.use(handleAuth(userService));
  *               content:
  *                 type: string
  *     responses:
- *       201:
+ *       200:
  *         description: Question created
  *       401:
  *         description: Authentication required
+ *       500:
+ *         description: Server error
  */
 questionRouter.post('/', requireAuth, questionController.create);
 
@@ -143,7 +145,7 @@ questionRouter.put('/:id', requireAuth, questionController.update);
  *         schema:
  *           type: string
  *     responses:
- *       204:
+ *       200:
  *         description: Question deleted
  *       401:
  *         description: Authentication required

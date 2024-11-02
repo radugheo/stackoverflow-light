@@ -13,7 +13,6 @@ export const handleAuth = (userService: UserService) => {
   return async (req: AuthRequest, res: Response, next: NextFunction) => {
     if (req.oidc.isAuthenticated()) {
       const auth0User = req.oidc.user!;
-      console.log('Auth0 User:', auth0User);
       try {
         const user = await userService.findOrCreateUser({
           auth0Id: auth0User.sub,

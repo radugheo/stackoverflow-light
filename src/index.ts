@@ -7,6 +7,7 @@ const app = createApp();
 console.log(
   `Connecting to database at ${process.env.DB_HOST}:${process.env.DB_PORT} as ${process.env.DB_USERNAME}`
 );
+
 AppDataSource.initialize()
   .then(() => {
     console.log('Data Source has been initialized!');
