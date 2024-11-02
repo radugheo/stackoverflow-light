@@ -6,13 +6,6 @@ import { Auth0UserProfile, AuthRequest } from '../types/request-types';
 
 export const configureAuth = auth(authConfig);
 
-export const requireAuth = (req: AuthRequest, res: Response, next: NextFunction) => {
-  if (!req.oidc.isAuthenticated()) {
-    return res.status(401).json({ error: 'Authentication required' });
-  }
-  next();
-};
-
 export const handleAuth = (userService: UserService) => {
   return async (req: AuthRequest, res: Response, next: NextFunction) => {
     if (req.oidc.isAuthenticated()) {

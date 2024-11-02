@@ -1,5 +1,5 @@
 import { Response, NextFunction } from 'express';
-import { requireAuth, handleAuth } from '../../src/middlewares/auth-middleware';
+import { handleAuth } from '../../src/middlewares/auth-middleware';
 import { AuthRequest } from '../../src/types/request-types';
 import { UserService } from '../../src/services/user-service';
 import { mockUser } from '../mocks/users';
@@ -31,24 +31,6 @@ describe('Auth Middleware', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
-  });
-
-  describe('requireAuth', () => {
-    it('should call next() if user is authenticated', () => {
-      jest.spyOn(mockAuthRequest.oidc!, 'isAuthenticated').mockReturnValue(true);
-
-      requireAuth(mockAuthRequest as AuthRequest, mockAuthResponse as Response, nextFunction);
-
-      expect(nextFunction).toHaveBeenCalled();
-    });
-
-    it('should return 401 if user is not authenticated', () => {
-      jest.spyOn(mockAuthRequest.oidc!, 'isAuthenticated').mockReturnValue(false);
-
-      requireAuth(mockAuthRequest as AuthRequest, mockAuthResponse as Response, nextFunction);
-
-      expect(mockAuthResponse.json).toHaveBeenCalledWith({ error: 'Authentication required' });
-    });
   });
 
   describe('handleAuth', () => {
