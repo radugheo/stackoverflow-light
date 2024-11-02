@@ -7,8 +7,10 @@
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "test": "jest",
+    "test:unit": "jest tests/unit", 
+    "test:integration": "jest tests/integration",
     "lint": "eslint . --ext .ts",
-    "format": "prettier --write \"src/**/*.ts\""
+    "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\""
   },
   "keywords": [],
   "author": "",
