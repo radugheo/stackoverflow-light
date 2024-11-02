@@ -3,6 +3,7 @@ import { UserService } from '../services/user-service';
 import { Auth0UserProfile, AuthRequest } from '../types/request-types';
 
 export const handleAuth = (userService: UserService) => {
+  console.log('Auth middleware invoked');
   return async (req: AuthRequest, res: Response, next: NextFunction) => {
     if (req.oidc.isAuthenticated()) {
       const auth0User = req.oidc.user as Auth0UserProfile;
