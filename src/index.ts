@@ -1,15 +1,8 @@
-import express from 'express';
-import { AppDataSource } from './config/database';
-import * as dotenv from 'dotenv';
+import { AppDataSource } from './config/database-config';
+import { createApp } from './app';
 
-dotenv.config();
-
-const app = express();
 const PORT = parseInt(process.env.PORT!) || 3000;
-
-app.get('/health', (_, res) => {
-  res.json({ status: 'ok' });
-});
+const app = createApp();
 
 AppDataSource.initialize()
   .then(() => {
