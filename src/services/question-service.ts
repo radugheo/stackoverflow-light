@@ -1,7 +1,7 @@
 import { Repository } from 'typeorm';
 import { Question } from '../models/question-entity';
 import { User } from '../models/user-entity';
-import { AppDataSource } from '../config/database';
+import { AppDataSource } from '../config/database-config';
 import { CreateQuestionDto, UpdateQuestionDto } from '../types/question-types';
 
 export class QuestionService {

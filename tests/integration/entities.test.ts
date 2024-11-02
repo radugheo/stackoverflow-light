@@ -1,4 +1,4 @@
-import { AppDataSource } from '../../src/config/database';
+import { AppDataSource } from '../../src/config/database-config';
 import { User } from '../../src/models/user-entity';
 import { Question } from '../../src/models/question-entity';
 import { Answer } from '../../src/models/answer-entity';
@@ -26,6 +26,7 @@ describe('Entity Integration', () => {
     const user = new User();
     user.email = 'test@example.com';
     user.displayName = 'Test User';
+    user.auth0Id = 'auth0Id';
     await AppDataSource.manager.save(user);
 
     expect(user.id).toBeDefined();
@@ -80,11 +81,13 @@ describe('Entity Integration', () => {
     const user1 = new User();
     user1.email = 'test@example.com';
     user1.displayName = 'Test User 1';
+    user1.auth0Id = 'auth0Id';
     await AppDataSource.manager.save(user1);
 
     const user2 = new User();
     user2.email = 'test@example.com';
     user2.displayName = 'Test User 2';
+    user2.auth0Id = 'auth0Id';
 
     await expect(AppDataSource.manager.save(user2)).rejects.toThrow();
   });

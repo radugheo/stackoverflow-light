@@ -11,6 +11,9 @@ export class User {
   @Column({ unique: true })
   email!: string;
 
+  @Column({ unique: true })
+  auth0Id!: string;
+
   @Column({ length: 100 })
   displayName!: string;
 
