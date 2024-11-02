@@ -2,6 +2,13 @@ import { Response, NextFunction } from 'express';
 import { UserService } from '../services/user-service';
 import { Auth0UserProfile, AuthRequest } from '../types/request-types';
 
+export const requireAuth = (req: AuthRequest, res: Response, next: NextFunction) => {
+  if (!req.oidc.isAuthenticated()) {
+    return res.status(401).json({ error: 'Authentication required' });
+  }
+  next();
+};
+
 export const handleAuth = (userService: UserService) => {
   console.log('Auth middleware invoked');
   return async (req: AuthRequest, res: Response, next: NextFunction) => {

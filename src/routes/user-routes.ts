@@ -1,8 +1,7 @@
 import { Router } from 'express';
 import { UserController } from '../controllers/user-controller';
 import { UserService } from '../services/user-service';
-import { handleAuth } from '../middlewares/auth-middleware';
-import { requiresAuth } from 'express-openid-connect';
+import { handleAuth, requireAuth } from '../middlewares/auth-middleware';
 
 const userService = new UserService();
 const userController = new UserController(userService);
@@ -25,4 +24,4 @@ userRouter.use(handleAuth(userService));
  *       401:
  *         description: Unauthorized
  */
-userRouter.get('/profile', requiresAuth, userController.getProfile);
+userRouter.get('/profile', requireAuth, userController.getProfile);
