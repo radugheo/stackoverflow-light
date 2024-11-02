@@ -7,9 +7,7 @@ export class UserController {
 
   getProfile = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
-      console.log('It got here');
       if (!req.user) {
-        console.log('Not authenticated')
         res.status(401).json({ error: 'Authentication required' });
         return;
       }

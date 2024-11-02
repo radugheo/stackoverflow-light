@@ -17,7 +17,7 @@ userRouter.use(handleAuth(userService));
  *     summary: Get user profile
  *     tags: [User]
  *     security:
- *       - openid: [] 
+ *       - openid: []
  *     responses:
  *       200:
  *         description: User profile information
