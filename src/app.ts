@@ -18,8 +18,8 @@ export const createApp = () => {
   app.use(express.json());
   app.use(configureAuth);
 
-  app.get('/health', (_, res) => {
-    res.json({ status: 'ok' });
+  app.get('/', (_, res) => {
+    res.redirect('/api/questions');
   });
 
   app.use('/api/users', userRouter);

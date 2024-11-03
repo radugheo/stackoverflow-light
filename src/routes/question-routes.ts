@@ -3,10 +3,11 @@ import { QuestionController } from '../controllers/question-controller';
 import { QuestionService } from '../services/question-service';
 import { handleAuth, requireAuth } from '../middlewares/auth-middleware';
 import { UserService } from '../services/user-service';
+import { answerRouter } from './answer-routes';
 
 const questionService = new QuestionService();
-const userService = new UserService();
 const questionController = new QuestionController(questionService);
+const userService = new UserService();
 
 export const questionRouter = Router();
 
@@ -60,6 +61,8 @@ questionRouter.get('/', questionController.findAll);
  *         description: Question not found
  */
 questionRouter.get('/:id', questionController.findOne);
+
+questionRouter.use('/:questionId/answers', answerRouter);
 
 questionRouter.use(handleAuth(userService));
 

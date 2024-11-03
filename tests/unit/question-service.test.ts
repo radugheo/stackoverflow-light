@@ -26,8 +26,6 @@ describe('Question Service', () => {
 
     mockUserRepository = {
       findOneBy: jest.fn(),
-      create: jest.fn(),
-      save: jest.fn(),
     };
 
     jest.spyOn(AppDataSource, 'getRepository').mockImplementation((entity) => {
@@ -150,6 +148,71 @@ describe('Question Service', () => {
       jest.spyOn(mockQuestionRepository, 'findOne').mockResolvedValue(null);
 
       await expect(questionService.findOne('999')).rejects.toThrow('Question not found');
+    });
+  });
+
+  describe('update', () => {
+    const updateQuestionDto = {
+      title: 'Updated Title',
+      content: 'Updated Content',
+    };
+
+    it('should update question when user is author', async () => {
+      const updatedQuestion = { ...mockQuestion1, ...updateQuestionDto };
+      jest.spyOn(mockQuestionRepository, 'findOne').mockResolvedValue(mockQuestion1);
+      jest.spyOn(mockQuestionRepository, 'save').mockResolvedValue(updatedQuestion);
+
+      const result = await questionService.update('1', mockUser.id, updateQuestionDto);
+
+      expect(result).toEqual(updatedQuestion);
+    });
+
+    it('should throw error when user is not author', async () => {
+      jest.spyOn(mockQuestionRepository, 'findOne').mockResolvedValue(mockQuestion1);
+
+      await expect(questionService.update('1', '999', updateQuestionDto)).rejects.toThrow(
+        'Not authorized to update this question'
+      );
+    });
+
+    it('should throw error when question not found', async () => {
+      jest.spyOn(mockQuestionRepository, 'findOne').mockResolvedValue(null);
+
+      await expect(questionService.update('999', mockUser.id, updateQuestionDto)).rejects.toThrow(
+        'Question not found'
+      );
+    });
+
+    it('should update only provided fields', async () => {
+      const partialUpdate = { title: 'Updated Title' };
+      const expectedUpdate = { ...mockQuestion1, title: 'Updated Title' };
+
+      jest.spyOn(mockQuestionRepository, 'findOne').mockResolvedValue(mockQuestion1);
+      jest.spyOn(mockQuestionRepository, 'save').mockResolvedValue(expectedUpdate);
+
+      const result = await questionService.update('1', mockUser.id, partialUpdate);
+
+      expect(result.title).toBe('Updated Title');
+      expect(result.content).toBe(mockQuestion1.content);
+    });
+  });
+
+  describe('delete', () => {
+    it('should delete question when user is author', async () => {
+      jest.spyOn(mockQuestionRepository, 'findOne').mockResolvedValue(mockQuestion1);
+      jest.spyOn(mockQuestionRepository, 'remove').mockResolvedValue(mockQuestion1);
+
+      await questionService.delete('1', mockUser.id);
+
+      expect(mockQuestionRepository.remove).toHaveBeenCalledWith(mockQuestion1);
+    });
+
+    it('should throw error when user is not author', async () => {
+      jest.spyOn(mockQuestionRepository, 'findOne').mockResolvedValue(mockQuestion1);
+
+      await expect(questionService.delete('1', '999')).rejects.toThrow(
+        'Not authorized to delete this question'
+      );
     });
   });
 });
