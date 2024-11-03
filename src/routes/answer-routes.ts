@@ -1,14 +1,6 @@
 import { Router } from 'express';
-import { AnswerController } from '../controllers/answer-controller';
-import { AnswerService } from '../services/answer-service';
 import { handleAuth, requireAuth } from '../middlewares/auth-middleware';
-import { UserService } from '../services/user-service';
-import { QuestionService } from '../services/question-service';
-
-const questionService = new QuestionService();
-const answerService = new AnswerService(questionService);
-const answerController = new AnswerController(answerService);
-const userService = new UserService();
+import { answerController, userService } from '../config/dependencies';
 
 export const answerRouter = Router({ mergeParams: true });
 

@@ -1,13 +1,7 @@
 import { Router } from 'express';
-import { QuestionController } from '../controllers/question-controller';
-import { QuestionService } from '../services/question-service';
 import { handleAuth, requireAuth } from '../middlewares/auth-middleware';
-import { UserService } from '../services/user-service';
 import { answerRouter } from './answer-routes';
-
-const questionService = new QuestionService();
-const questionController = new QuestionController(questionService);
-const userService = new UserService();
+import { questionController, userService } from '../config/dependencies';
 
 export const questionRouter = Router();
 

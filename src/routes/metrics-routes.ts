@@ -1,9 +1,5 @@
 import { Router } from 'express';
-import { MetricsController } from '../controllers/metrics-controller';
-import { MetricsService } from '../services/metrics-service';
-
-const metricsService = new MetricsService();
-const metricsController = new MetricsController(metricsService);
+import { metricsController } from '../config/dependencies';
 
 export const metricsRouter = Router();
 
