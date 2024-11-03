@@ -8,9 +8,10 @@ import { mockQuestion1 } from '../mocks/questions';
 import { mockUser } from '../mocks/users';
 import { ObjectLiteral, Repository } from 'typeorm';
 import { UpdateResult } from 'typeorm/browser';
+import { QuestionService } from '../../src/services/question-service';
 
 describe('Answer Service', () => {
-  let answerService: AnswerService = new AnswerService();
+  let answerService: AnswerService = new AnswerService(new QuestionService());
   let mockAnswerRepository: Partial<Repository<Answer>>;
   let mockQuestionRepository: Partial<Repository<Question>>;
   let mockUserRepository: Partial<Repository<User>>;
@@ -29,6 +30,8 @@ describe('Answer Service', () => {
 
     mockQuestionRepository = {
       findOneBy: jest.fn(),
+      findOne: jest.fn(),
+      update: jest.fn(),
       increment: jest.fn(),
       decrement: jest.fn(),
     };
@@ -44,7 +47,7 @@ describe('Answer Service', () => {
       return {} as Repository<ObjectLiteral>;
     });
 
-    answerService = new AnswerService();
+    answerService = new AnswerService(new QuestionService());
   });
 
   afterEach(() => {
@@ -65,6 +68,10 @@ describe('Answer Service', () => {
       jest.spyOn(mockAnswerRepository, 'save').mockResolvedValue(mockAnswer1);
       jest
         .spyOn(mockQuestionRepository, 'increment')
+        .mockResolvedValue({ affected: 1 } as UpdateResult);
+      jest.spyOn(mockQuestionRepository, 'findOne').mockResolvedValue(mockQuestion1);
+      jest
+        .spyOn(mockQuestionRepository, 'update')
         .mockResolvedValue({ affected: 1 } as UpdateResult);
 
       const result = await answerService.create(createAnswerDto);
@@ -161,6 +168,10 @@ describe('Answer Service', () => {
       jest.spyOn(mockAnswerRepository, 'remove').mockResolvedValue(mockAnswer1);
       jest
         .spyOn(mockQuestionRepository, 'decrement')
+        .mockResolvedValue({ affected: 1 } as UpdateResult);
+      jest.spyOn(mockQuestionRepository, 'findOne').mockResolvedValue(mockQuestion1);
+      jest
+        .spyOn(mockQuestionRepository, 'update')
         .mockResolvedValue({ affected: 1 } as UpdateResult);
 
       await answerService.delete('1', mockUser.id);

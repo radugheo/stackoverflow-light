@@ -3,8 +3,10 @@ import { AnswerController } from '../controllers/answer-controller';
 import { AnswerService } from '../services/answer-service';
 import { handleAuth, requireAuth } from '../middlewares/auth-middleware';
 import { UserService } from '../services/user-service';
+import { QuestionService } from '../services/question-service';
 
-const answerService = new AnswerService();
+const questionService = new QuestionService();
+const answerService = new AnswerService(questionService);
 const answerController = new AnswerController(answerService);
 const userService = new UserService();
 

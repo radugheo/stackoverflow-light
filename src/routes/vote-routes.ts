@@ -3,8 +3,12 @@ import { VoteController } from '../controllers/vote-controller';
 import { VoteService } from '../services/vote-service';
 import { handleAuth, requireAuth } from '../middlewares/auth-middleware';
 import { UserService } from '../services/user-service';
+import { QuestionService } from '../services/question-service';
+import { AnswerService } from '../services/answer-service';
 
-const voteService = new VoteService();
+const questionService = new QuestionService();
+const answerService = new AnswerService(questionService);
+const voteService = new VoteService(questionService, answerService);
 const voteController = new VoteController(voteService);
 const userService = new UserService();
 

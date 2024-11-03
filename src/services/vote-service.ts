@@ -1,22 +1,21 @@
 import { Repository } from 'typeorm';
 import { Vote } from '../models/vote-entity';
 import { User } from '../models/user-entity';
-import { Question } from '../models/question-entity';
-import { Answer } from '../models/answer-entity';
 import { AppDataSource } from '../config/database-config';
 import { CreateVoteDto } from '../types/vote-types';
+import { QuestionService } from './question-service';
+import { AnswerService } from './answer-service';
 
 export class VoteService {
   private voteRepository: Repository<Vote>;
   private userRepository: Repository<User>;
-  private questionRepository: Repository<Question>;
-  private answerRepository: Repository<Answer>;
 
-  constructor() {
+  constructor(
+    private questionService: QuestionService,
+    private answerService: AnswerService
+  ) {
     this.voteRepository = AppDataSource.getRepository(Vote);
     this.userRepository = AppDataSource.getRepository(User);
-    this.questionRepository = AppDataSource.getRepository(Question);
-    this.answerRepository = AppDataSource.getRepository(Answer);
   }
 
   findByQuestion = async (questionId: string): Promise<Vote[]> => {
@@ -140,9 +139,9 @@ export class VoteService {
     answerId?: string
   ): Promise<void> => {
     if (questionId) {
-      await this.questionRepository.increment({ id: questionId }, 'voteCount', value);
+      await this.questionService.updateVoteCount(questionId, value);
     } else if (answerId) {
-      await this.answerRepository.increment({ id: answerId }, 'voteCount', value);
+      await this.answerService.updateVoteCount(answerId, value);
     }
   };
 }
