@@ -1,6 +1,7 @@
 import { Repository } from 'typeorm';
 import { User } from '../models/user-entity';
 import { AppDataSource } from '../config/database-config';
+import { Auth0UserData } from '../types/user-types';
 
 export class UserService {
   private userRepository: Repository<User>;
@@ -9,11 +10,7 @@ export class UserService {
     this.userRepository = AppDataSource.getRepository(User);
   }
 
-  findOrCreateUser = async (userData: {
-    auth0Id: string;
-    email: string;
-    displayName: string;
-  }): Promise<User> => {
+  findOrCreateUser = async (userData: Auth0UserData): Promise<User> => {
     let user = await this.userRepository.findOneBy({
       auth0Id: userData.auth0Id,
     });
