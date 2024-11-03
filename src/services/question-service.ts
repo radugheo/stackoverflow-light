@@ -24,7 +24,7 @@ export class QuestionService {
       relations: ['author'],
       skip: (page - 1) * limit,
       take: limit,
-      order: sortBy === 'newest' ? { created: 'DESC' } : { voteCount: 'DESC' },
+      order: sortBy === 'newest' ? { created: 'DESC' } : { voteCount: 'DESC' }, // to do: change popularity criteria
     });
 
     return {

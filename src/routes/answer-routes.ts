@@ -58,7 +58,7 @@ answerRouter.use(handleAuth(userService));
  *               content:
  *                 type: string
  *     responses:
- *       201:
+ *       200:
  *         description: Answer created
  *       401:
  *         description: Authentication required
@@ -125,7 +125,7 @@ answerRouter.put('/:id', requireAuth, answerController.update);
  *         schema:
  *           type: string
  *     responses:
- *       204:
+ *       200:
  *         description: Answer deleted
  *       401:
  *         description: Authentication required
