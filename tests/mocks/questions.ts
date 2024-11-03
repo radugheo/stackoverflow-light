@@ -11,6 +11,7 @@ export const mockQuestion1 = {
   updated: new Date(),
   author: { id: '1' } as User,
   answers: [],
+  popularity: 1,
   votes: [],
 } as Question;
 
@@ -24,6 +25,7 @@ export const mockQuestion2 = {
   updated: new Date(),
   author: { id: '1' } as User,
   answers: [],
+  popularity: 1,
   votes: [],
 } as Question;
 
@@ -37,6 +39,7 @@ export const mockQuestion3 = {
   updated: new Date(),
   author: { id: '1' } as User,
   answers: [],
+  popularity: 1,
   votes: [],
 } as Question;
 
@@ -50,5 +53,6 @@ export const mockQuestion4 = {
   updated: new Date(),
   author: { id: '1' } as User,
   answers: [],
+  popularity: 1,
   votes: [],
 } as Question;

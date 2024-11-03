@@ -5,13 +5,16 @@ import { Question } from '../../src/models/question-entity';
 import { Answer } from '../../src/models/answer-entity';
 import { AppDataSource } from '../../src/config/database-config';
 import { mockUser } from '../mocks/users';
-import { ObjectLiteral, Repository } from 'typeorm';
+import { ObjectLiteral, Repository, UpdateResult } from 'typeorm';
 import {
   mockVoteAnswer,
   mockVoteQuestion,
   mockVoteQuestion2,
   mockVoteWrongUser,
 } from '../mocks/votes';
+import { AnswerService } from '../../src/services/answer-service';
+import { QuestionService } from '../../src/services/question-service';
+import { mockQuestion1 } from '../mocks/questions';
 
 describe('Vote Service', () => {
   let voteService: VoteService;
@@ -37,6 +40,8 @@ describe('Vote Service', () => {
 
     mockQuestionRepository = {
       increment: jest.fn(),
+      findOne: jest.fn(),
+      update: jest.fn(),
     };
 
     mockAnswerRepository = {
@@ -51,7 +56,7 @@ describe('Vote Service', () => {
       return {} as Repository<ObjectLiteral>;
     });
 
-    voteService = new VoteService();
+    voteService = new VoteService(new QuestionService(), new AnswerService(new QuestionService()));
   });
   afterEach(() => {
     jest.clearAllMocks();
@@ -119,6 +124,10 @@ describe('Vote Service', () => {
       jest.spyOn(mockVoteRepository, 'findOne').mockResolvedValue(null);
       jest.spyOn(mockVoteRepository, 'create').mockReturnValue(mockVoteQuestion);
       jest.spyOn(mockVoteRepository, 'save').mockResolvedValue(mockVoteQuestion);
+      jest.spyOn(mockQuestionRepository, 'findOne').mockResolvedValue(mockQuestion1);
+      jest
+        .spyOn(mockQuestionRepository, 'update')
+        .mockResolvedValue({ affected: 1 } as UpdateResult);
 
       const result = await voteService.create(createVoteDto);
 
@@ -128,6 +137,10 @@ describe('Vote Service', () => {
     it('should remove existing vote if same value', async () => {
       jest.spyOn(mockUserRepository, 'findOneBy').mockResolvedValue(mockUser);
       jest.spyOn(mockVoteRepository, 'findOne').mockResolvedValue(mockVoteQuestion);
+      jest.spyOn(mockQuestionRepository, 'findOne').mockResolvedValue(mockQuestion1);
+      jest
+        .spyOn(mockQuestionRepository, 'update')
+        .mockResolvedValue({ affected: 1 } as UpdateResult);
 
       await voteService.create(createVoteDto);
 
@@ -137,6 +150,10 @@ describe('Vote Service', () => {
     it('should update existing vote if different value', async () => {
       jest.spyOn(mockUserRepository, 'findOneBy').mockResolvedValue(mockUser);
       jest.spyOn(mockVoteRepository, 'findOne').mockResolvedValue(mockVoteQuestion2);
+      jest.spyOn(mockQuestionRepository, 'findOne').mockResolvedValue(mockQuestion1);
+      jest
+        .spyOn(mockQuestionRepository, 'update')
+        .mockResolvedValue({ affected: 1 } as UpdateResult);
 
       await voteService.create(createVoteDto);
 
@@ -165,6 +182,10 @@ describe('Vote Service', () => {
   describe('delete', () => {
     it('should delete vote and update count', async () => {
       jest.spyOn(mockVoteRepository, 'findOne').mockResolvedValue(mockVoteQuestion);
+      jest.spyOn(mockQuestionRepository, 'findOne').mockResolvedValue(mockQuestion1);
+      jest
+        .spyOn(mockQuestionRepository, 'update')
+        .mockResolvedValue({ affected: 1 } as UpdateResult);
 
       await voteService.delete('1', mockUser.id);
 

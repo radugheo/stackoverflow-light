@@ -7,6 +7,7 @@ import {
   FindQuestionsOptions,
   UpdateQuestionDto,
 } from '../types/question-types';
+import { calculatePopularity } from '../utils/calculate-popularity';
 
 export class QuestionService {
   private questionRepository: Repository<Question>;
@@ -24,7 +25,7 @@ export class QuestionService {
       relations: ['author'],
       skip: (page - 1) * limit,
       take: limit,
-      order: sortBy === 'newest' ? { created: 'DESC' } : { voteCount: 'DESC' }, // to do: change popularity criteria
+      order: sortBy === 'newest' ? { created: 'DESC' } : { popularity: 'DESC' },
     });
 
     return {
@@ -97,11 +98,25 @@ export class QuestionService {
     await this.questionRepository.remove(question);
   };
 
+  private updatePopularity = async (question: Question): Promise<void> => {
+    const newPopularity = calculatePopularity(
+      question.voteCount,
+      question.answerCount,
+      question.created
+    );
+
+    await this.questionRepository.update({ id: question.id }, { popularity: newPopularity });
+  };
+
   updateVoteCount = async (id: string, value: number): Promise<void> => {
     await this.questionRepository.increment({ id }, 'voteCount', value);
+    const question = await this.findOne(id);
+    await this.updatePopularity(question);
   };
 
   updateAnswerCount = async (id: string, value: number): Promise<void> => {
     await this.questionRepository.increment({ id }, 'answerCount', value);
+    const question = await this.findOne(id);
+    await this.updatePopularity(question);
   };
 }

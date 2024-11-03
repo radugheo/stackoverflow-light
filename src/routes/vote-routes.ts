@@ -1,12 +1,6 @@
 import { Router } from 'express';
-import { VoteController } from '../controllers/vote-controller';
-import { VoteService } from '../services/vote-service';
 import { handleAuth, requireAuth } from '../middlewares/auth-middleware';
-import { UserService } from '../services/user-service';
-
-const voteService = new VoteService();
-const voteController = new VoteController(voteService);
-const userService = new UserService();
+import { userService, voteController } from '../config/dependencies';
 
 export const voteRouter = Router();
 

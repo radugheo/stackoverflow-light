@@ -4,13 +4,14 @@ import { User } from '../models/user-entity';
 import { Question } from '../models/question-entity';
 import { AppDataSource } from '../config/database-config';
 import { CreateAnswerDto, UpdateAnswerDto } from '../types/answer-types';
+import { QuestionService } from './question-service';
 
 export class AnswerService {
   private answerRepository: Repository<Answer>;
   private questionRepository: Repository<Question>;
   private userRepository: Repository<User>;
 
-  constructor() {
+  constructor(private questionService: QuestionService) {
     this.answerRepository = AppDataSource.getRepository(Answer);
     this.questionRepository = AppDataSource.getRepository(Question);
     this.userRepository = AppDataSource.getRepository(User);
@@ -67,7 +68,7 @@ export class AnswerService {
     });
 
     await this.answerRepository.save(answer);
-    await this.questionRepository.increment({ id: question.id }, 'answerCount', 1);
+    await this.questionService.updateAnswerCount(question.id, 1);
 
     return answer;
   };
@@ -95,7 +96,7 @@ export class AnswerService {
     }
 
     await this.answerRepository.remove(answer);
-    await this.questionRepository.decrement({ id: answer.question.id }, 'answerCount', 1);
+    await this.questionService.updateAnswerCount(answer.question.id, -1);
   };
 
   updateVoteCount = async (id: string, value: number): Promise<void> => {

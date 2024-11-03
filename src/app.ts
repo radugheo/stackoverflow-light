@@ -7,6 +7,7 @@ import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerOptions from './config/swagger-config';
 import { questionRouter } from './routes/question-routes';
 import { voteRouter } from './routes/vote-routes';
+import { metricsRouter } from './routes/metrics-routes';
 
 dotenv.config();
 
@@ -26,5 +27,6 @@ export const createApp = () => {
   app.use('/api/users', userRouter);
   app.use('/api/questions', questionRouter);
   app.use('/api/votes', voteRouter);
+  app.use('/api/metrics', metricsRouter);
   return app;
 };

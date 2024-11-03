@@ -40,6 +40,10 @@ export class Question {
   @Column({ default: 0 })
   answerCount: number;
 
+  @Column({ type: 'float', default: 0 })
+  @Index()
+  popularity!: number;
+
   @CreateDateColumn()
   @Index()
   created: Date;
