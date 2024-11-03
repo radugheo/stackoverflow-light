@@ -1,4 +1,5 @@
 import { Options } from 'swagger-jsdoc';
+import swaggerPaths from '../utils/swagger-paths';
 
 const swaggerOptions: Options = {
   definition: {
@@ -12,6 +13,7 @@ const swaggerOptions: Options = {
         url: 'http://localhost:3000/',
       },
     ],
+    paths: swaggerPaths,
   },
   apis: ['./src/routes/*.ts'],
 };
