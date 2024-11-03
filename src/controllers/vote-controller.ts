@@ -31,9 +31,6 @@ export class VoteController {
 
   getUserVote = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
-      console.log(`UserId: ${req.user!.id}`);
-      console.log(`QuestionId: ${req.query.questionId}`);
-      console.log(`AnswewrId: ${req.query.answerId}`);
       const vote = await this.voteService.findUserVote(
         req.user!.id,
         req.query.questionId as string,
