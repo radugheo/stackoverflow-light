@@ -23,10 +23,10 @@ export class Vote {
   @ManyToOne(() => User, (user) => user.votes)
   user!: User;
 
-  @ManyToOne(() => Question, (question) => question.votes, { nullable: true })
+  @ManyToOne(() => Question, (question) => question.votes, { nullable: true, onDelete: 'CASCADE' })
   question?: Question;
 
-  @ManyToOne(() => Answer, (answer) => answer.votes, { nullable: true })
+  @ManyToOne(() => Answer, (answer) => answer.votes, { nullable: true, onDelete: 'CASCADE' })
   answer?: Answer;
 
   @CreateDateColumn()
