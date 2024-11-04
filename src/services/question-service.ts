@@ -8,6 +8,8 @@ import {
   UpdateQuestionDto,
 } from '../types/question-types';
 import { calculatePopularity } from '../utils/calculate-popularity';
+import { WebSocketService } from './websocket-service';
+import { WebSocketEvents } from '../types/websocket-types';
 
 export class QuestionService {
   private questionRepository: Repository<Question>;
@@ -70,7 +72,18 @@ export class QuestionService {
       author,
     });
 
-    return this.questionRepository.save(question);
+    const savedQuestion = await this.questionRepository.save(question);
+
+    WebSocketService.emit(WebSocketEvents.QUESTION_CREATED, {
+      id: savedQuestion.id,
+      title: savedQuestion.title,
+      content: savedQuestion.content,
+      authorId: savedQuestion.author.id,
+      voteCount: savedQuestion.voteCount,
+      answerCount: savedQuestion.answerCount,
+    });
+
+    return savedQuestion;
   };
 
   update = async (
@@ -85,7 +98,18 @@ export class QuestionService {
     }
 
     Object.assign(question, updateQuestionDto);
-    return this.questionRepository.save(question);
+    const updatedQuestion = await this.questionRepository.save(question);
+
+    WebSocketService.emit(WebSocketEvents.QUESTION_UPDATED, {
+      id: updatedQuestion.id,
+      title: updatedQuestion.title,
+      content: updatedQuestion.content,
+      authorId: updatedQuestion.author.id,
+      voteCount: updatedQuestion.voteCount,
+      answerCount: updatedQuestion.answerCount,
+    });
+
+    return updatedQuestion;
   };
 
   delete = async (id: string, userId: string): Promise<void> => {
@@ -96,6 +120,7 @@ export class QuestionService {
     }
 
     await this.questionRepository.remove(question);
+    WebSocketService.emit(WebSocketEvents.QUESTION_DELETED, { id });
   };
 
   private updatePopularity = async (question: Question): Promise<void> => {
@@ -112,11 +137,29 @@ export class QuestionService {
     await this.questionRepository.increment({ id }, 'voteCount', value);
     const question = await this.findOne(id);
     await this.updatePopularity(question);
+
+    WebSocketService.emit(WebSocketEvents.QUESTION_VOTED, {
+      id: question.id,
+      title: question.title,
+      content: question.content,
+      authorId: question.author.id,
+      voteCount: question.voteCount,
+      answerCount: question.answerCount,
+    });
   };
 
   updateAnswerCount = async (id: string, value: number): Promise<void> => {
     await this.questionRepository.increment({ id }, 'answerCount', value);
     const question = await this.findOne(id);
     await this.updatePopularity(question);
+
+    WebSocketService.emit(WebSocketEvents.QUESTION_ANSWERED, {
+      id: question.id,
+      title: question.title,
+      content: question.content,
+      authorId: question.author.id,
+      voteCount: question.voteCount,
+      answerCount: question.answerCount,
+    });
   };
 }
