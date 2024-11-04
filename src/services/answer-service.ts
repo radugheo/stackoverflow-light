@@ -5,6 +5,8 @@ import { Question } from '../models/question-entity';
 import { AppDataSource } from '../config/database-config';
 import { CreateAnswerDto, UpdateAnswerDto } from '../types/answer-types';
 import { QuestionService } from './question-service';
+import { WebSocketService } from './websocket-service';
+import { WebSocketEvents } from '../types/websocket-types';
 
 export class AnswerService {
   private answerRepository: Repository<Answer>;
@@ -67,10 +69,18 @@ export class AnswerService {
       question,
     });
 
-    await this.answerRepository.save(answer);
+    const savedAnswer = await this.answerRepository.save(answer);
     await this.questionService.updateAnswerCount(question.id, 1);
 
-    return answer;
+    WebSocketService.emit(WebSocketEvents.ANSWER_CREATED, {
+      id: savedAnswer.id,
+      content: savedAnswer.content,
+      questionId: savedAnswer.question.id,
+      authorId: savedAnswer.author.id,
+      voteCount: savedAnswer.voteCount,
+    });
+
+    return savedAnswer;
   };
 
   update = async (
@@ -85,7 +95,16 @@ export class AnswerService {
     }
 
     Object.assign(answer, updateAnswerDto);
-    return this.answerRepository.save(answer);
+    const updatedAnswer = await this.answerRepository.save(answer);
+
+    WebSocketService.emit(WebSocketEvents.ANSWER_UPDATED, {
+      id: updatedAnswer.id,
+      content: updatedAnswer.content,
+      questionId: updatedAnswer.question.id,
+      authorId: updatedAnswer.author.id,
+      voteCount: updatedAnswer.voteCount,
+    });
+    return updatedAnswer;
   };
 
   delete = async (id: string, userId: string): Promise<void> => {
@@ -95,11 +114,26 @@ export class AnswerService {
       throw new Error('Not authorized to delete this answer');
     }
 
+    const questionId = answer.question.id;
     await this.answerRepository.remove(answer);
-    await this.questionService.updateAnswerCount(answer.question.id, -1);
+    await this.questionService.updateAnswerCount(questionId, -1);
+
+    WebSocketService.emit(WebSocketEvents.ANSWER_DELETED, {
+      id: answer.id,
+      questionId,
+    });
   };
 
   updateVoteCount = async (id: string, value: number): Promise<void> => {
     await this.answerRepository.increment({ id }, 'voteCount', value);
+    const answer = await this.findOne(id);
+
+    WebSocketService.emit(WebSocketEvents.ANSWER_VOTED, {
+      id: answer.id,
+      content: answer.content,
+      questionId: answer.question.id,
+      authorId: answer.author.id,
+      voteCount: answer.voteCount,
+    });
   };
 }
