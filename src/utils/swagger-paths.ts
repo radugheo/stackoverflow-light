@@ -177,7 +177,7 @@ const questionPaths = {
           schema: {
             type: 'string',
             enum: ['newest', 'popular'],
-            default: 'newest',
+            default: 'popular',
           },
         },
       ],
