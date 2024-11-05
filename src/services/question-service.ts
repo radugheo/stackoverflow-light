@@ -21,7 +21,7 @@ export class QuestionService {
   }
 
   findAll = async (options: FindQuestionsOptions = {}) => {
-    const { page = 1, limit = 10, sortBy = 'newest' } = options;
+    const { page = 1, limit = 10, sortBy = 'popular' } = options;
 
     const [questions, total] = await this.questionRepository.findAndCount({
       relations: ['author'],

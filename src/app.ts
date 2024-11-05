@@ -28,5 +28,8 @@ export const createApp = () => {
   app.use('/api/questions', questionRouter);
   app.use('/api/votes', voteRouter);
   app.use('/api/metrics', metricsRouter);
+
+  // Development route for testing Redis cache
+  // app.use('/api/dev', testRouter);
   return app;
 };

@@ -177,7 +177,7 @@ const questionPaths = {
           schema: {
             type: 'string',
             enum: ['newest', 'popular'],
-            default: 'newest',
+            default: 'popular',
           },
         },
       ],
@@ -334,12 +334,26 @@ const votePaths = {
   },
 };
 
+const cachePaths = {
+  '/api/dev/cache': {
+    get: {
+      summary: 'Test cache state',
+      tags: ['Test'],
+      security: [{ openid: [] }],
+      responses: {
+        200: { description: 'Current cache entries' },
+      },
+    },
+  },
+};
+
 const swaggerPaths = {
   ...metricsPaths,
   ...answerPaths,
   ...questionPaths,
   ...userPaths,
   ...votePaths,
+  ...cachePaths,
 };
 
 export default swaggerPaths;
