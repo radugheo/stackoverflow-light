@@ -16,7 +16,7 @@ export const cachePopularQuestions = async (req: Request, res: Response, next: N
 
       const originalJson = res.json;
       res.json = (body) => {
-        redis.setex(getCacheKey(limit), 60, JSON.stringify(body)).catch((error) => {
+        redis.setex(getCacheKey(limit), 3600, JSON.stringify(body)).catch((error) => {
           console.error('Redis cache error:', error);
         });
         return originalJson.call(res, body);
