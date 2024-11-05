@@ -1,12 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import Redis from 'ioredis';
-
-const redis = new Redis({
-  host: process.env.REDIS_HOST || 'localhost',
-  port: parseInt(process.env.REDIS_PORT || '6379'),
-});
-
-const getCacheKey = (limit: number) => `questions:popular:${limit}`;
+import { redis } from '../config/redis-config';
+import { getCacheKey } from '../utils/helpers';
 
 export const cachePopularQuestions = async (req: Request, res: Response, next: NextFunction) => {
   const page = parseInt(req.query.page as string) || 1;
