@@ -10,7 +10,7 @@ export class QuestionController {
     try {
       const page = parseInt(req.query.page as string) || 1;
       const limit = parseInt(req.query.limit as string) || 10;
-      const sortBy = (req.query.sortBy as 'newest' | 'popular') || 'newest';
+      const sortBy = (req.query.sortBy as 'newest' | 'popular') || 'popular';
 
       const result = await this.questionService.findAll({
         page,

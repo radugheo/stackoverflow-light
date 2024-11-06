@@ -8,6 +8,7 @@ import swaggerOptions from './config/swagger-config';
 import { questionRouter } from './routes/question-routes';
 import { voteRouter } from './routes/vote-routes';
 import { metricsRouter } from './routes/metrics-routes';
+import { testRouter } from './routes/test-routes';
 
 dotenv.config();
 
@@ -30,6 +31,6 @@ export const createApp = () => {
   app.use('/api/metrics', metricsRouter);
 
   // Development route for testing Redis cache
-  // app.use('/api/dev', testRouter);
+  app.use('/api/dev', testRouter);
   return app;
 };

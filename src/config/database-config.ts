@@ -16,6 +16,15 @@ export const AppDataSource = new DataSource({
   database: process.env.DB_NAME,
   entities: [User, Question, Answer, Vote],
   synchronize: true,
-  migrations: ['src/database/migrations/*.ts'],
-  subscribers: [],
+});
+
+export const TestDataSource = new DataSource({
+  type: 'postgres',
+  host: 'localhost',
+  port: 5433,
+  username: 'postgres',
+  password: 'postgres',
+  database: 'test_db',
+  entities: [User, Question, Answer, Vote],
+  synchronize: true,
 });
