@@ -6,18 +6,18 @@ on:
       - '**'
 
 jobs:
-  test:
+  install-and-test:
     runs-on: ubuntu-latest
 
     services:
-      postgres:
+      dbtest:
         image: postgres:14-alpine
+        ports:
+          - 5433:5432
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
           POSTGRES_DB: test_db
-        ports:
-          - 5433:5432
 
       redis:
         image: redis:alpine
@@ -43,4 +43,4 @@ jobs:
       run: npm run lint
 
     - name: Test
-      run: npm run test
+      run: npm run test:unit
