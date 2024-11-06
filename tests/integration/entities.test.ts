@@ -1,23 +1,23 @@
-import { AppDataSource } from '../../src/config/database-config';
 import { User } from '../../src/models/user-entity';
 import { Question } from '../../src/models/question-entity';
 import { Answer } from '../../src/models/answer-entity';
 import { Vote } from '../../src/models/vote-entity';
+import { TestDataSource } from '../../src/config/database-config';
 
 describe('Entity Integration', () => {
   beforeAll(async () => {
-    await AppDataSource.initialize();
+    await TestDataSource.initialize();
   });
 
   afterAll(async () => {
-    await AppDataSource.destroy();
+    await TestDataSource.destroy();
   });
 
   beforeEach(async () => {
-    await AppDataSource.manager.delete(Vote, {});
-    await AppDataSource.manager.delete(Answer, {});
-    await AppDataSource.manager.delete(Question, {});
-    await AppDataSource.manager.delete(User, {});
+    await TestDataSource.manager.delete(Vote, {});
+    await TestDataSource.manager.delete(Answer, {});
+    await TestDataSource.manager.delete(Question, {});
+    await TestDataSource.manager.delete(User, {});
   });
 
   it('should create entities with proper relationships', async () => {
@@ -27,7 +27,7 @@ describe('Entity Integration', () => {
     user.email = 'test@example.com';
     user.displayName = 'Test User';
     user.auth0Id = 'auth0Id';
-    await AppDataSource.manager.save(user);
+    await TestDataSource.manager.save(user);
 
     expect(user.id).toBeDefined();
 
@@ -35,7 +35,7 @@ describe('Entity Integration', () => {
     question.title = 'How to?';
     question.content = 'I want to...';
     question.author = user;
-    await AppDataSource.manager.save(question);
+    await TestDataSource.manager.save(question);
 
     expect(question.id).toBeDefined();
     expect(question.author.id).toBe(user.id);
@@ -44,7 +44,7 @@ describe('Entity Integration', () => {
     answer.content = "Here's how...";
     answer.author = user;
     answer.question = question;
-    await AppDataSource.manager.save(answer);
+    await TestDataSource.manager.save(answer);
 
     expect(answer.id).toBeDefined();
     expect(answer.author.id).toBe(user.id);
@@ -54,13 +54,13 @@ describe('Entity Integration', () => {
     vote.value = 1;
     vote.user = user;
     vote.question = question;
-    await AppDataSource.manager.save(vote);
+    await TestDataSource.manager.save(vote);
 
     expect(vote.id).toBeDefined();
     expect(vote.user.id).toBe(user.id);
     expect(vote.question.id).toBe(question.id);
 
-    const questionWithRelations = await AppDataSource.manager.findOne(Question, {
+    const questionWithRelations = await TestDataSource.manager.findOne(Question, {
       where: { id: question.id },
       relations: {
         author: true,
@@ -82,13 +82,13 @@ describe('Entity Integration', () => {
     user1.email = 'test@example.com';
     user1.displayName = 'Test User 1';
     user1.auth0Id = 'auth0Id';
-    await AppDataSource.manager.save(user1);
+    await TestDataSource.manager.save(user1);
 
     const user2 = new User();
     user2.email = 'test@example.com';
     user2.displayName = 'Test User 2';
     user2.auth0Id = 'auth0Id';
 
-    await expect(AppDataSource.manager.save(user2)).rejects.toThrow();
+    await expect(TestDataSource.manager.save(user2)).rejects.toThrow();
   });
 });
