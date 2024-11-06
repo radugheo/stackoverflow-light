@@ -6,7 +6,7 @@ on:
       - '**'
 
 jobs:
-  test:
+  install-and-test:
     runs-on: ubuntu-latest
 
     services:
@@ -43,4 +43,4 @@ jobs:
       run: npm run lint
 
     - name: Test
-      run: npm run test
+      run: npm run test:unit
