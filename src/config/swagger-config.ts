@@ -15,7 +15,7 @@ const swaggerOptions: Options = {
     ],
     paths: swaggerPaths,
   },
-  apis: ['./src/routes/*.ts'],
+  apis: ['./src/routes/v1/*.ts'],
 };
 
 export default swaggerOptions;
