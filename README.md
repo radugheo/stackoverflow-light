@@ -34,6 +34,9 @@ The application follows a layered architecture pattern, specifically implementin
 Request -> Routes -> Controllers -> Services -> Repositories -> Database
 ```
 
+### API URL Versioning
+All API endpoints are versioned under `/v1` (e.g., `/api/v1/questions`).
+
 ### Project Structure
 ```
 src/
