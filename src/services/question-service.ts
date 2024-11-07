@@ -7,9 +7,9 @@ import {
   FindQuestionsOptions,
   UpdateQuestionDto,
 } from '../types/question-types';
-import { calculatePopularity } from '../utils/calculate-popularity';
 import { WebSocketService } from './websocket-service';
 import { WebSocketEvents } from '../types/websocket-types';
+import { calculatePopularity } from '../utils/helpers';
 
 export class QuestionService {
   private questionRepository: Repository<Question>;

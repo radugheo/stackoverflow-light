@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { AnswerService } from '../services/answer-service';
 import { AuthRequest } from '../types/request-types';
 import { CreateAnswerDto, UpdateAnswerDto } from '../types/answer-types';
+import { isError } from '../utils/helpers';
 
 export class AnswerController {
   constructor(private answerService: AnswerService) {}
@@ -10,8 +11,12 @@ export class AnswerController {
     try {
       const answers = await this.answerService.findAll(req.params.questionId);
       res.json(answers);
-    } catch (error) {
-      res.status(500).json({ error: (error as Error).message });
+    } catch (error: unknown) {
+      if (isError(error)) {
+        res.status(500).json({ error: error.message });
+      } else {
+        res.status(500).json({ error: 'Unknown error occurred' });
+      }
     }
   };
 
@@ -24,8 +29,12 @@ export class AnswerController {
       };
       const answer = await this.answerService.create(createAnswerDto);
       res.status(200).json(answer);
-    } catch (error) {
-      res.status(500).json({ error: (error as Error).message });
+    } catch (error: unknown) {
+      if (isError(error)) {
+        res.status(500).json({ error: error.message });
+      } else {
+        res.status(500).json({ error: 'Unknown error occurred' });
+      }
     }
   };
 
@@ -34,8 +43,12 @@ export class AnswerController {
       const updateAnswerDto: UpdateAnswerDto = req.body;
       const answer = await this.answerService.update(req.params.id, req.user!.id, updateAnswerDto);
       res.json(answer);
-    } catch (error) {
-      res.status(403).json({ error: (error as Error).message });
+    } catch (error: unknown) {
+      if (isError(error)) {
+        res.status(403).json({ error: error.message });
+      } else {
+        res.status(500).json({ error: 'Unknown error occurred' });
+      }
     }
   };
 
@@ -43,8 +56,12 @@ export class AnswerController {
     try {
       await this.answerService.delete(req.params.id, req.user!.id);
       res.status(200).json({ message: 'Delete was successful' });
-    } catch (error) {
-      res.status(403).json({ error: (error as Error).message });
+    } catch (error: unknown) {
+      if (isError(error)) {
+        res.status(403).json({ error: error.message });
+      } else {
+        res.status(500).json({ error: 'Unknown error occurred' });
+      }
     }
   };
 }
