@@ -1,6 +1,7 @@
 import { Response } from 'express';
 import { VoteService } from '../services/vote-service';
 import { AuthRequest } from '../types/request-types';
+import { isError } from '../utils/helpers';
 
 export class VoteController {
   constructor(private voteService: VoteService) {}
@@ -15,8 +16,12 @@ export class VoteController {
       });
 
       res.status(200).json(vote);
-    } catch (error) {
-      res.status(400).json({ error: (error as Error).message });
+    } catch (error: unknown) {
+      if (isError(error)) {
+        res.status(400).json({ error: error.message });
+      } else {
+        res.status(500).json({ error: 'Unknown error occurred' });
+      }
     }
   };
 
@@ -24,8 +29,12 @@ export class VoteController {
     try {
       await this.voteService.delete(req.params.id, req.user!.id);
       res.status(200).send({ message: 'Delete was successful' });
-    } catch (error) {
-      res.status(403).json({ error: (error as Error).message });
+    } catch (error: unknown) {
+      if (isError(error)) {
+        res.status(403).json({ error: error.message });
+      } else {
+        res.status(500).json({ error: 'Unknown error occurred' });
+      }
     }
   };
 
@@ -38,8 +47,12 @@ export class VoteController {
       );
 
       res.json(vote);
-    } catch (error) {
-      res.status(400).json({ error: (error as Error).message });
+    } catch (error: unknown) {
+      if (isError(error)) {
+        res.status(400).json({ error: error.message });
+      } else {
+        res.status(500).json({ error: 'Unknown error occurred' });
+      }
     }
   };
 }

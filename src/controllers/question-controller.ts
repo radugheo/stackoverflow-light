@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { QuestionService } from '../services/question-service';
 import { AuthRequest } from '../types/request-types';
 import { CreateQuestionDto, UpdateQuestionDto } from '../types/question-types';
+import { isError } from '../utils/helpers';
 
 export class QuestionController {
   constructor(private questionService: QuestionService) {}
@@ -18,8 +19,12 @@ export class QuestionController {
         sortBy,
       });
       res.json(result);
-    } catch (error) {
-      res.status(500).json({ error: (error as Error).message });
+    } catch (error: unknown) {
+      if (isError(error)) {
+        res.status(500).json({ error: error.message });
+      } else {
+        res.status(500).json({ error: 'Unknown error occurred' });
+      }
     }
   };
 
@@ -27,8 +32,12 @@ export class QuestionController {
     try {
       const question = await this.questionService.findOne(req.params.id);
       res.json(question);
-    } catch (error) {
-      res.status(404).json({ error: (error as Error).message });
+    } catch (error: unknown) {
+      if (isError(error)) {
+        res.status(404).json({ error: error.message });
+      } else {
+        res.status(500).json({ error: 'Unknown error occurred' });
+      }
     }
   };
 
@@ -41,8 +50,12 @@ export class QuestionController {
 
       const question = await this.questionService.create(createQuestionDto);
       res.status(200).json(question);
-    } catch (error) {
-      res.status(500).json({ error: (error as Error).message });
+    } catch (error: unknown) {
+      if (isError(error)) {
+        res.status(500).json({ error: error.message });
+      } else {
+        res.status(500).json({ error: 'Unknown error occurred' });
+      }
     }
   };
 
@@ -55,8 +68,12 @@ export class QuestionController {
         updateQuestionDto
       );
       res.json(question);
-    } catch (error) {
-      res.status(403).json({ error: (error as Error).message });
+    } catch (error: unknown) {
+      if (isError(error)) {
+        res.status(403).json({ error: error.message });
+      } else {
+        res.status(500).json({ error: 'Unknown error occurred' });
+      }
     }
   };
 
@@ -64,8 +81,12 @@ export class QuestionController {
     try {
       await this.questionService.delete(req.params.id, req.user!.id);
       res.status(200).json({ message: 'Delete was successful' });
-    } catch (error) {
-      res.status(403).json({ error: (error as Error).message });
+    } catch (error: unknown) {
+      if (isError(error)) {
+        res.status(403).json({ error: error.message });
+      } else {
+        res.status(500).json({ error: 'Unknown error occurred' });
+      }
     }
   };
 }
