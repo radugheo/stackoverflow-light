@@ -114,7 +114,7 @@ describe('Metrics API E2E Tests', () => {
     it('should return complete metrics data', async () => {
       expect.hasAssertions();
 
-      const response = await request(app).get('/api/metrics');
+      const response = await request(app).get('/api/v1/metrics');
 
       expect(response.status).toBe(200);
       expect(response.body).toEqual({

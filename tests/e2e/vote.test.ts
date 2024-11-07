@@ -73,7 +73,7 @@ describe('Vote API E2E Tests', () => {
         questionId: testQuestion.id,
       };
 
-      const response = await request(app).post('/api/votes').send(newVote);
+      const response = await request(app).post('/api/v1/votes').send(newVote);
 
       expect(response.status).toBe(200);
       expect(response.body.value).toBe(1);
@@ -86,7 +86,7 @@ describe('Vote API E2E Tests', () => {
         answerId: testAnswer.id,
       };
 
-      const response = await request(app).post('/api/votes').send(newVote);
+      const response = await request(app).post('/api/v1/votes').send(newVote);
 
       expect(response.status).toBe(200);
       expect(response.body.value).toBe(1);
@@ -100,7 +100,7 @@ describe('Vote API E2E Tests', () => {
         answerId: testAnswer.id,
       };
 
-      const response = await request(app).post('/api/votes').send(invalidVote);
+      const response = await request(app).post('/api/v1/votes').send(invalidVote);
 
       expect(response.status).toBe(400);
       expect(response.body.error).toBeDefined();
@@ -113,7 +113,7 @@ describe('Vote API E2E Tests', () => {
         questionId: testQuestion.id,
       };
 
-      const response = await request(app).post('/api/votes').send(updateVote);
+      const response = await request(app).post('/api/v1/votes').send(updateVote);
 
       expect(response.status).toBe(200);
       expect(response.body.value).toBe(-1);
@@ -124,7 +124,7 @@ describe('Vote API E2E Tests', () => {
     it('should delete own vote', async () => {
       expect.hasAssertions();
 
-      const response = await request(app).delete(`/api/votes/${testVote.id}`);
+      const response = await request(app).delete(`/api/v1/votes/${testVote.id}`);
 
       expect(response.status).toBe(200);
       expect(response.body.message).toBe('Delete was successful');
@@ -133,7 +133,7 @@ describe('Vote API E2E Tests', () => {
     it('should fail to delete non-existent vote', async () => {
       expect.hasAssertions();
 
-      const response = await request(app).delete('/api/votes/999999');
+      const response = await request(app).delete('/api/v1/votes/999999');
 
       expect(response.status).toBe(403);
       expect(response.body.error).toBeDefined();
@@ -145,7 +145,7 @@ describe('Vote API E2E Tests', () => {
       expect.hasAssertions();
 
       const response = await request(app)
-        .get('/api/votes/user')
+        .get('/api/v1/votes/user')
         .query({ questionId: testQuestion.id });
 
       expect(response.status).toBe(200);
@@ -155,7 +155,7 @@ describe('Vote API E2E Tests', () => {
     it('should get user vote for an answer', async () => {
       expect.hasAssertions();
 
-      const response = await request(app).get('/api/votes/user').query({ answerId: testAnswer.id });
+      const response = await request(app).get('/api/v1/votes/user').query({ answerId: testAnswer.id });
 
       expect(response.status).toBe(200);
       expect(response.body).toBeDefined();
@@ -164,7 +164,7 @@ describe('Vote API E2E Tests', () => {
     it('should fail when querying without questionId or answerId', async () => {
       expect.hasAssertions();
 
-      const response = await request(app).get('/api/votes/user');
+      const response = await request(app).get('/api/v1/votes/user');
 
       expect(response.status).toBe(400);
       expect(response.body.error).toBeDefined();
@@ -173,7 +173,7 @@ describe('Vote API E2E Tests', () => {
     it('should fail when querying with both questionId and answerId', async () => {
       expect.hasAssertions();
 
-      const response = await request(app).get('/api/votes/user').query({
+      const response = await request(app).get('/api/v1/votes/user').query({
         questionId: testQuestion.id,
         answerId: testAnswer.id,
       });

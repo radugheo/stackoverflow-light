@@ -47,7 +47,7 @@ describe('Question API E2E Tests', () => {
   describe('GET routes', () => {
     it('should get all questions', async () => {
       expect.hasAssertions();
-      const response = await request(app).get('/api/questions');
+      const response = await request(app).get('/api/v1/questions');
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveProperty('questions');
@@ -55,7 +55,7 @@ describe('Question API E2E Tests', () => {
 
     it('should get a specific question', async () => {
       expect.hasAssertions();
-      const response = await request(app).get(`/api/questions/${testQuestion.id}`);
+      const response = await request(app).get(`/api/v1/questions/${testQuestion.id}`);
 
       expect(response.status).toBe(200);
       expect(response.body.title).toBe(expectedQuestion.title);
@@ -64,7 +64,7 @@ describe('Question API E2E Tests', () => {
     it('should return 404 for non-existent question', async () => {
       expect.hasAssertions();
 
-      const response = await request(app).get('/api/questions/999999');
+      const response = await request(app).get('/api/v1/questions/999999');
 
       expect(response.status).toBe(404);
       expect(response.body.error).toBeDefined();
@@ -79,7 +79,7 @@ describe('Question API E2E Tests', () => {
         content: 'New Content',
       };
 
-      const response = await request(app).post('/api/questions').send(newQuestion);
+      const response = await request(app).post('/api/v1/questions').send(newQuestion);
 
       expect(response.status).toBe(200);
       expect(response.body.title).toEqual('New Question');
@@ -95,7 +95,7 @@ describe('Question API E2E Tests', () => {
         content: 'Updated Content',
       };
 
-      const response = await request(app).put(`/api/questions/${testQuestion.id}`).send(update);
+      const response = await request(app).put(`/api/v1/questions/${testQuestion.id}`).send(update);
 
       expect(response.status).toBe(200);
       expect(response.body.title).toBe('Updated Title');

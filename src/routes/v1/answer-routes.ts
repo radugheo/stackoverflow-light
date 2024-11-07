@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { handleAuth, requireAuth } from '../middlewares/auth-middleware';
-import { answerController, userService } from '../config/dependencies';
+import { handleAuth, requireAuth } from '../../middlewares/auth-middleware';
+import { answerController, userService } from '../../config/dependencies';
 
 export const answerRouter = Router({ mergeParams: true });
 
