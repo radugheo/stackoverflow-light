@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Router } from 'express';
-import { redis } from '../config/redis-config';
+import { redis } from '../../config/redis-config';
 
 export const testRouter = Router();
 

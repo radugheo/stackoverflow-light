@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { metricsController } from '../config/dependencies';
+import { metricsController } from '../../config/dependencies';
 
 export const metricsRouter = Router();
 

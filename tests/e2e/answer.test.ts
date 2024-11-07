@@ -57,7 +57,7 @@ describe('Answer API E2E Tests', () => {
   describe('GET routes', () => {
     it('should get all answers for a question', async () => {
       expect.hasAssertions();
-      const response = await request(app).get(`/api/questions/${testQuestion.id}/answers`);
+      const response = await request(app).get(`/api/v1/questions/${testQuestion.id}/answers`);
 
       expect(response.status).toBe(200);
       expect(response.body[0].content).toBe('Test Answer Content');
@@ -72,7 +72,7 @@ describe('Answer API E2E Tests', () => {
       };
 
       const response = await request(app)
-        .post(`/api/questions/${testQuestion.id}/answers`)
+        .post(`/api/v1/questions/${testQuestion.id}/answers`)
         .send(newAnswer);
 
       expect(response.status).toBe(200);
@@ -88,7 +88,7 @@ describe('Answer API E2E Tests', () => {
       };
 
       const response = await request(app)
-        .put(`/api/questions/${testQuestion.id}/answers/${testAnswer.id}`)
+        .put(`/api/v1/questions/${testQuestion.id}/answers/${testAnswer.id}`)
         .send(update);
 
       expect(response.status).toBe(200);
@@ -102,7 +102,7 @@ describe('Answer API E2E Tests', () => {
       };
 
       const response = await request(app)
-        .put(`/api/questions/${testQuestion.id}/answers/999999`)
+        .put(`/api/v1/questions/${testQuestion.id}/answers/999999`)
         .send(update);
 
       expect(response.status).toBe(403);
@@ -115,7 +115,7 @@ describe('Answer API E2E Tests', () => {
       expect.hasAssertions();
 
       const response = await request(app).delete(
-        `/api/questions/${testQuestion.id}/answers/${testAnswer.id}`
+        `/api/v1/questions/${testQuestion.id}/answers/${testAnswer.id}`
       );
 
       expect(response.status).toBe(200);
@@ -126,7 +126,7 @@ describe('Answer API E2E Tests', () => {
       expect.hasAssertions();
 
       const response = await request(app).delete(
-        `/api/questions/${testQuestion.id}/answers/999999`
+        `/api/v1/questions/${testQuestion.id}/answers/999999`
       );
 
       expect(response.status).toBe(403);

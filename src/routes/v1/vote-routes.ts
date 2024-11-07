@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { handleAuth, requireAuth } from '../middlewares/auth-middleware';
-import { userService, voteController } from '../config/dependencies';
-import { clearQuestionsCache } from '../middlewares/cache-middleware';
+import { handleAuth, requireAuth } from '../../middlewares/auth-middleware';
+import { userService, voteController } from '../../config/dependencies';
+import { clearQuestionsCache } from '../../middlewares/cache-middleware';
 
 export const voteRouter = Router();
 

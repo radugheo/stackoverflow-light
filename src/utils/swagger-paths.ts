@@ -1,5 +1,5 @@
 const metricsPaths = {
-  '/api/metrics': {
+  '/api/v1/metrics': {
     get: {
       summary: 'Get platform metrics',
       tags: ['Metrics'],
@@ -40,7 +40,7 @@ const metricsPaths = {
 };
 
 const answerPaths = {
-  '/api/questions/{questionId}/answers': {
+  '/api/v1/questions/{questionId}/answers': {
     get: {
       summary: 'Get all answers for a question',
       tags: ['Answers'],
@@ -89,7 +89,7 @@ const answerPaths = {
       },
     },
   },
-  '/api/questions/{questionId}/answers/{id}': {
+  '/api/v1/questions/{questionId}/answers/{id}': {
     put: {
       summary: 'Update an answer',
       tags: ['Answers'],
@@ -156,7 +156,7 @@ const answerPaths = {
 };
 
 const questionPaths = {
-  '/api/questions': {
+  '/api/v1/questions': {
     get: {
       summary: 'Get all questions',
       tags: ['Questions'],
@@ -212,7 +212,7 @@ const questionPaths = {
       },
     },
   },
-  '/api/questions/{id}': {
+  '/api/v1/questions/{id}': {
     get: {
       summary: 'Get question by ID',
       tags: ['Questions'],
@@ -262,7 +262,7 @@ const questionPaths = {
 };
 
 const userPaths = {
-  '/api/users/profile': {
+  '/api/v1/users/profile': {
     get: {
       summary: 'Get user profile',
       tags: ['User'],
@@ -276,7 +276,7 @@ const userPaths = {
 };
 
 const votePaths = {
-  '/api/votes': {
+  '/api/v1/votes': {
     post: {
       summary: 'Create or update vote',
       tags: ['Votes'],
@@ -304,7 +304,7 @@ const votePaths = {
       },
     },
   },
-  '/api/votes/{id}': {
+  '/api/v1/votes/{id}': {
     delete: {
       summary: 'Delete vote',
       tags: ['Votes'],
@@ -317,7 +317,7 @@ const votePaths = {
       },
     },
   },
-  '/api/votes/user': {
+  '/api/v1/votes/user': {
     get: {
       summary: "Get user's vote for question/answer",
       tags: ['Votes'],
@@ -335,7 +335,7 @@ const votePaths = {
 };
 
 const cachePaths = {
-  '/api/dev/cache': {
+  '/api/v1/dev/cache': {
     get: {
       summary: 'Test cache state',
       tags: ['Test'],

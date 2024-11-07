@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { handleAuth, requireAuth } from '../middlewares/auth-middleware';
+import { handleAuth, requireAuth } from '../../middlewares/auth-middleware';
 import { answerRouter } from './answer-routes';
-import { questionController, userService } from '../config/dependencies';
-import { cachePopularQuestions, clearQuestionsCache } from '../middlewares/cache-middleware';
+import { questionController, userService } from '../../config/dependencies';
+import { cachePopularQuestions, clearQuestionsCache } from '../../middlewares/cache-middleware';
 
 export const questionRouter = Router();
 
