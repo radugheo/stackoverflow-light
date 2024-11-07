@@ -155,7 +155,9 @@ describe('Vote API E2E Tests', () => {
     it('should get user vote for an answer', async () => {
       expect.hasAssertions();
 
-      const response = await request(app).get('/api/v1/votes/user').query({ answerId: testAnswer.id });
+      const response = await request(app)
+        .get('/api/v1/votes/user')
+        .query({ answerId: testAnswer.id });
 
       expect(response.status).toBe(200);
       expect(response.body).toBeDefined();
