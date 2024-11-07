@@ -108,9 +108,9 @@ The application implements Redis caching to optimize performance for frequently 
 
 2. Copy .env.example to .env and configure environment variables
 
-3. Start the Application (make sure Docker is running)
+3. Start the Application (make sure Docker Desktop is running)
 ```bash
-docker-compose up
+docker-compose up --build
 ```
 This will start:
 * Main application on port 3000
